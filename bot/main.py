@@ -4,11 +4,11 @@ import threading
 import telebot
 from dotenv import load_dotenv
 
+import auto.auto_pause as auto
+import initializers.database
 import repo.peer
 import service.peer
-import auto.auto_pause as auto
 import sheet.sheet as sheet
-import initializers.database
 
 API_KEY = os.getenv("API_KEY")
 bot = telebot.TeleBot(API_KEY)

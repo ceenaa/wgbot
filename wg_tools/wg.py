@@ -1,9 +1,10 @@
 import os
 import subprocess
 from datetime import datetime
-from model.peer import Wg_peer
 
 import pytz
+
+from model.peer import Wg_peer
 
 
 def convert_byte_to_gib(byte):
@@ -71,7 +72,7 @@ def resume_peer(public_key, allowed_ips, pre_shared_key):
 
     try:
         command1 = f"wg set {sys_name} peer \"{public_key}\" allowed-ips {allowed_ips} " \
-               f"preshared-key <(echo \"{pre_shared_key}\")"
+                   f"preshared-key <(echo \"{pre_shared_key}\")"
 
         command2 = f"ip -4 route add {allowed_ips} dev {sys_name}"
 
@@ -83,8 +84,5 @@ def resume_peer(public_key, allowed_ips, pre_shared_key):
 
 
 def reset_peer(public_key, allowed_ips, pre_shared_key):
-
     pause_peer(public_key, allowed_ips)
     resume_peer(public_key, allowed_ips, pre_shared_key)
-
-
