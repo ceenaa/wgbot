@@ -1,0 +1,2 @@
+# wgbot
+Wireguard telegram bot
