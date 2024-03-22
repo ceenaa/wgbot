@@ -12,7 +12,8 @@ import sheet.sheet as sheet
 
 API_KEY = os.getenv("API_KEY")
 bot = telebot.TeleBot(API_KEY)
-initializers.database.connect_to_db()
+
+initializers.database.init()
 load_dotenv()
 
 

@@ -1,12 +1,11 @@
 import os
 import subprocess
 from contextlib import closing
-
-from initializers.database import DB
+import initializers.database
 
 
 def create_table():
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         c.execute("""
         CREATE TABLE IF NOT EXISTS peers
                      (name TEXT PRIMARY KEY,
@@ -22,31 +21,31 @@ def create_table():
 
 
 def get_all_peers():
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         c.execute("SELECT * FROM peers")
         return c.fetchall()
 
 
 def get_peer_name(public_key):
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         c.execute("SELECT name FROM peers WHERE public_key = ?", (public_key,))
         return c.fetchone()[0]
 
 
 def get_peer_transfer(public_key):
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         c.execute("SELECT transfer FROM peers WHERE public_key = ?", (public_key,))
         return c.fetchone()
 
 
 def get_peer_by_name(name):
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         c.execute("SELECT * FROM peers WHERE name = ?", (name,))
         return c.fetchone()
 
 
 def is_name_exists(name):
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         c.execute("SELECT * FROM peers WHERE name = ?", (name,))
         if c.fetchone() is None:
             return False
@@ -54,14 +53,14 @@ def is_name_exists(name):
 
 
 def update_peer(peer):
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         c.execute("INSERT OR REPLACE INTO peers VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
                   (peer.name, peer.public_key, peer.pre_shared_key, peer.endpoint, peer.allowed_ips,
                    peer.latest_handshake, peer.transfer, peer.active))
 
 
 def register_new_peers():
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         file = open("new_peers.txt", "r")
         lines = file.readlines()
         file.close()
@@ -94,7 +93,7 @@ def register_new_peers():
 
 
 def import_data():
-    with closing(DB.cursor()) as c:
+    with closing(initializers.database.DB.cursor()) as c:
         file = open("data.txt", "r")
         lines = file.readlines()
         file.close()
