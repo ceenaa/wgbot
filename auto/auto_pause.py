@@ -1,3 +1,4 @@
+import os
 import sched
 import time
 
@@ -5,12 +6,13 @@ import gspread
 
 import repo.peer
 import service.peer
-import sheet.sheet as sheet
+from sheet import sheet
 
 delay_time = 60 * 60 * 12
 
 sa = gspread.service_account(filename='keys.json')
-sh = sa.open_by_key(sheet.sheet_id)
+sheet_id = os.getenv("SHEET_ID")
+sh = sa.open_by_key(sheet_id)
 wks = sh.worksheet("Sheet1")
 
 

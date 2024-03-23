@@ -1,3 +1,6 @@
+import json
+
+
 class Peer:
     def __init__(self, name, public_key, pre_shared_key, endpoint, allowed_ips, latest_handshake, transfer, active):
         self.name = name

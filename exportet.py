@@ -1,10 +1,11 @@
 from dotenv import load_dotenv
-import repo.peer
+
 import initializers.database
+import service.peer
 
 initializers.database.connect_to_db()
 load_dotenv()
 
-repo.peer.import_data()
+service.peer.update_all_peers()
 initializers.database.DB.close()
 

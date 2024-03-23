@@ -5,7 +5,7 @@ DB = None
 
 def connect_to_db():
     global DB
-    DB = sqlite3.connect("database.db")
+    DB = sqlite3.connect("database.db", check_same_thread=False)
 
 
 def create_table():

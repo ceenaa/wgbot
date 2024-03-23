@@ -4,6 +4,7 @@ import os
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from service.peer import get_short_all_peers
 
 sheet_id = os.environ.get("SHEET_ID")
 
@@ -23,7 +24,7 @@ def main():
     # Call the Sheets API
     sheet = service.spreadsheets()
 
-    peers = service.peer.get_all_peers()
+    peers = get_short_all_peers()
 
     body = {
         'values': peers

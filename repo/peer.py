@@ -4,22 +4,6 @@ from contextlib import closing
 import initializers.database
 
 
-def create_table():
-    with closing(initializers.database.DB.cursor()) as c:
-        c.execute("""
-        CREATE TABLE IF NOT EXISTS peers
-                     (name TEXT PRIMARY KEY,
-                     public_key TEXT NOT NULL,
-                     pre_shared_key TEXT NOT NULL,
-                     endpoint TEXT NOT NULL,
-                     allowed_ips TEXT NOT NULL,
-                     latest_handshake TEXT NOT NULL,
-                     transfer INTEGER NOT NULL,
-                     active INTEGER NOT NULL)
-        """
-                  )
-
-
 def get_all_peers():
     with closing(initializers.database.DB.cursor()) as c:
         c.execute("SELECT * FROM peers")
@@ -44,6 +28,12 @@ def get_peer_by_name(name):
         return c.fetchone()
 
 
+def get_short_peer(name):
+    with closing(initializers.database.DB.cursor()) as c:
+        c.execute("SELECT public_key ,transfer, active FROM peers WHERE name = ?", (name,))
+        return c.fetchone()
+
+
 def is_name_exists(name):
     with closing(initializers.database.DB.cursor()) as c:
         c.execute("SELECT * FROM peers WHERE name = ?", (name,))
@@ -57,6 +47,8 @@ def update_peer(peer):
         c.execute("INSERT OR REPLACE INTO peers VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
                   (peer.name, peer.public_key, peer.pre_shared_key, peer.endpoint, peer.allowed_ips,
                    peer.latest_handshake, peer.transfer, peer.active))
+
+        initializers.database.DB.commit()
 
 
 def register_new_peers():
@@ -91,6 +83,8 @@ def register_new_peers():
             subprocess.run(['bash', '-c', command1])
             subprocess.run(['bash', '-c', command2])
 
+        initializers.database.DB.commit()
+
 
 def import_data():
     with closing(initializers.database.DB.cursor()) as c:
@@ -122,3 +116,5 @@ def import_data():
                 command2 = f"ip -4 route add {allowed_ips} dev {sys_name}"
                 subprocess.run(['bash', '-c', command1])
                 subprocess.run(['bash', '-c', command2])
+
+        initializers.database.DB.commit()

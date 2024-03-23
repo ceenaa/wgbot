@@ -81,8 +81,3 @@ def resume_peer(public_key, allowed_ips, pre_shared_key):
 
     except subprocess.CalledProcessError:
         print("Error in resuming peer")
-
-
-def reset_peer(public_key, allowed_ips, pre_shared_key):
-    pause_peer(public_key, allowed_ips)
-    resume_peer(public_key, allowed_ips, pre_shared_key)
