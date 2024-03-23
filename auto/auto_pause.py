@@ -3,10 +3,13 @@ import sched
 import time
 
 import gspread
+from dotenv import load_dotenv
 
 import repo.peer
 import service.peer
 from sheet import sheet
+
+load_dotenv()
 
 delay_time = 60 * 60 * 12
 

@@ -60,7 +60,8 @@ def get_short_peer(name):
     active = data[2]
 
     updated_peer = wg_tools.get_peer(public_key)
-    transfer += updated_peer.transfer
+    if updated_peer is not None:
+        transfer += updated_peer.transfer
 
     return [name, transfer, active]
 

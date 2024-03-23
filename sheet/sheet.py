@@ -2,12 +2,12 @@ from __future__ import print_function
 
 import os
 
+from dotenv import load_dotenv
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from service.peer import get_short_all_peers
 
-sheet_id = os.environ.get("SHEET_ID")
-
+load_dotenv()
 
 def main():
     SERVICE_ACCOUNT_FILE = 'keys.json'
@@ -17,7 +17,7 @@ def main():
         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 
     # The ID spreadsheet.
-    SAMPLE_SPREADSHEET_ID = sheet_id
+    SPREADSHEET_ID = os.environ.get("SHEET_ID")
 
     service = build('sheets', 'v4', credentials=creds)
 
@@ -30,5 +30,5 @@ def main():
         'values': peers
     }
 
-    sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="peers" + "!A2", body=body,
+    sheet.values().update(spreadsheetId=SPREADSHEET_ID, range="peers" + "!A2", body=body,
                           valueInputOption="USER_ENTERED").execute()
