@@ -46,6 +46,16 @@ def get_all_peers():
     return peers
 
 
+def get_all_active_peers():
+    datas = repo.peer.get_all_active_peers()
+    peers = []
+    for data in datas:
+        peer = get_peer(data[0])
+        peers.append(peer)
+
+    return peers
+
+
 # get short form of a peer by name, return the name, transfer, and active status
 # used for displaying peers in the Google sheet interface
 # totally works like get_peer
@@ -129,3 +139,9 @@ def update_all_peers():
     peers = get_all_peers()
     for peer in peers:
         repo.peer.update_peer(peer)
+
+
+def activate_active_peer():
+    active_peers = get_all_active_peers()
+    for peer in active_peers:
+        wg_tools.resume_peer(peer.public_key, peer.allowed_ips, peer.pre_shared_key)
