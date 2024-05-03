@@ -1,10 +1,8 @@
 import os
-import threading
 
 import telebot
 from dotenv import load_dotenv
 
-import auto.auto_pause as auto
 import initializers.database
 import repo.peer
 import service.peer
@@ -79,6 +77,7 @@ def resume_request(message):
             return True
     return False
 
+
 @bot.message_handler(func=resume_request)
 def send_resume(message):
     try:
@@ -125,5 +124,4 @@ def send_user(message):
 
 
 sheet.main()
-threading.Thread(target=lambda: auto.auto()).start()
-bot.polling(none_stop=True, interval=0)
+bot.polling()

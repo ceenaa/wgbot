@@ -4,19 +4,12 @@ import time
 
 import gspread
 from dotenv import load_dotenv
-
 import repo.peer
 import service.peer
+
+import initializers.database
+
 from sheet import sheet
-
-load_dotenv()
-
-delay_time = 60 * 60 * 12
-
-sa = gspread.service_account(filename='keys.json')
-sheet_id = os.getenv("SHEET_ID")
-sh = sa.open_by_key(sheet_id)
-wks = sh.worksheet("Sheet1")
 
 
 def daily_pause(scheduler):
@@ -43,3 +36,19 @@ def auto():
     my_scheduler = sched.scheduler(time.time, time.sleep)
     my_scheduler.enter(1, 1, daily_pause, (my_scheduler,))
     my_scheduler.run()
+
+
+if __name__ == "__main__":
+    print("test")
+    initializers.database.init()
+
+    load_dotenv()
+
+    delay_time = 60 * 60 * 12
+
+    sa = gspread.service_account(filename='keys.json')
+    sheet_id = os.getenv("SHEET_ID")
+    sh = sa.open_by_key(sheet_id)
+    wks = sh.worksheet("Sheet1")
+
+    auto()
